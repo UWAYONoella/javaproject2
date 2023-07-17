@@ -68,6 +68,27 @@ public class ConnectDB {
 	        }
 	        return row;
 	    }
+	 
+	 public void addSales(String date,String shoetype,String shoeid,String color,String size,String pairs,String priceunit) {
+		 String sql ="INSERT INTO Sales(Date,ShoeType,ShoeId,Color,Size,Pairs,PairUnitPrice) VALUE(?,?,?,?,?,?,?)";
+		 try {
+			 PreparedStatement st=con.prepareStatement(sql);
+			 st.setString(1,date);
+			 st.setString(2,shoetype);
+			 st.setString(3,shoeid);
+			 st.setString(4,color);
+			 st.setString(5,size);
+			 st.setString(6,pairs);
+			 st.setString(7,priceunit);
+			 
+			 int row =st.executeUpdate();
+			 if(row>0) {
+				 JOptionPane.showMessageDialog(null, "Well Inserted!");
+			 }
+		 } catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+	 }
 	
 }
 

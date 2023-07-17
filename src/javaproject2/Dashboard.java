@@ -10,6 +10,8 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Dashboard extends JFrame {
 
@@ -55,10 +57,18 @@ public class Dashboard extends JFrame {
 		btnAboutUs.setBackground(new Color(255, 255, 255));
 		panel.add(btnAboutUs);
 		
-		JButton btnProducts = new JButton("Products");
-		btnProducts.setBackground(new Color(255, 255, 255));
-		btnProducts.setBounds(12, 111, 117, 34);
-		panel.add(btnProducts);
+		JButton btnSale = new JButton("Sales");
+		btnSale.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				sales sl =new sales();
+				sl.setVisible(true);
+				
+			}
+		});
+		btnSale.setBackground(new Color(255, 255, 255));
+		btnSale.setBounds(12, 111, 117, 34);
+		panel.add(btnSale);
 		
 		JButton btnBuy = new JButton("Stock");
 		btnBuy.setBackground(new Color(255, 255, 255));
@@ -66,6 +76,13 @@ public class Dashboard extends JFrame {
 		panel.add(btnBuy);
 		
 		JButton btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				SignUp sn =new SignUp();
+				sn.setVisible(true);
+			}
+		});
 		btnLogout.setBackground(new Color(255, 255, 255));
 		btnLogout.setBounds(12, 274, 117, 34);
 		panel.add(btnLogout);
