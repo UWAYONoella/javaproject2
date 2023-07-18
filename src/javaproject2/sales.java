@@ -17,6 +17,8 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class sales extends JFrame {
@@ -30,6 +32,7 @@ public class sales extends JFrame {
 	private JTextField textFieldsize;
 	private JTextField textFieldpair;
 	private JTextField textFieldprice;
+	DefaultTableModel model;
 	String date;String shoetype;String shoeid;String color;String size;String pairs;String priceunit;
 	/**
 	 * Launch the application.
@@ -65,6 +68,7 @@ public class sales extends JFrame {
 		mainPane.add(scrollPane);
 		
 		table = new JTable();
+		
 		table.setBorder(new LineBorder(new Color(255, 190, 111), 3));
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -72,8 +76,34 @@ public class sales extends JFrame {
 			new String[] {
 				"Date", "ShoeType", "ShoeId", "color","Size","Pairs","PairUnitPrice"
 			}
+			
 		));
 		scrollPane.setViewportView(table);
+			Object[]row=new Object[7];
+	   
+		 DefaultTableModel model = (DefaultTableModel) table.getModel();
+	        try {
+	            ConnectDB db = new ConnectDB();
+	            db.dbConnection(); 
+	   
+	            ResultSet rs = db.getSales();
+	            while (rs.next()) {
+	                String date = rs.getString("Date");
+	                String shoetype = rs.getString("ShoeType");
+	                String shoeid= rs.getString("ShoeId");
+	                String color = rs.getString("Color");
+	                String sidateze = rs.getString("Size");
+	                String pairs = rs.getString("Pairs");
+	                String priceunit = rs.getString("PairUnitPrice");
+	                model.addRow(new Object[]{date , shoetype, shoeid, color, sidateze, pairs, priceunit});
+	         
+	              
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+		
+	       
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(12, 50, 523, 650);
@@ -107,12 +137,15 @@ public class sales extends JFrame {
 		JLabel lblPairsunitprice = new JLabel("PairsUnitPrice");
 		lblPairsunitprice.setBounds(15, 371, 113, 15);
 		panel.add(lblPairsunitprice);
+//		Object[] row=new Object[8];
 		
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ConnectDB db = new ConnectDB();
 				db.dbConnection();
+				
+
 				String date =textFielddate.getText();
 				String shoetype=textFieldshoetype.getText();
 				String shoeid =textFieldshoeid.getText();
@@ -123,7 +156,8 @@ public class sales extends JFrame {
 				
 				try {
 					db.addSales( date,shoetype,shoeid,color,size,pairs, priceunit);
-					JOptionPane.showMessageDialog(null, "Well connected!");
+					
+//					JOptionPane.showMessageDialog(null, "Well connected!");
 				} catch(Exception en) {
 					en.printStackTrace();
 				}
@@ -133,10 +167,79 @@ public class sales extends JFrame {
 		panel.add(btnAdd);
 		
 		JButton btnUpdate = new JButton("Update");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConnectDB db = new ConnectDB();
+				db.dbConnection();
+				String date = textFielddate().getText();
+				String shoetype = textFieldshoetype().getText();
+				String shoeid = textFieldshoeid().getText();
+				String color = textFieldcolor().getText();
+				String size = textFieldsize().getText();
+				String pairs = textFieldpair().getText();
+				String priceunit = textFieldprice().getText();
+
+				try {
+					db.addSales( date,shoetype,shoeid,color,size,pairs, priceunit);
+					
+//					JOptionPane.showMessageDialog(null, "Well connected!");
+				} catch(Exception en) {
+					en.printStackTrace();
+				}
+			}
+
+			private JTextField textFieldprice() {
+				// TODO Auto-generated method stub
+				return textFieldprice;
+			}
+
+			private JTextField textFieldsize() {
+				// TODO Auto-generated method stub
+				return textFieldprice;
+			}
+
+			private JTextField textFieldpair() {
+				// TODO Auto-generated method stub
+				return textFieldpair;
+			}
+
+			private JTextField textFieldcolor() {
+				// TODO Auto-generated method stub
+				return textFieldcolor;
+			}
+
+			private JTextField textFieldshoeid() {
+				// TODO Auto-generated method stub
+				return textFieldshoeid;
+			}
+
+			private JTextField textFieldshoetype() {
+				// TODO Auto-generated method stub
+				return textFieldshoetype;
+			}
+
+			private JTextField textFielddate() {
+				// TODO Auto-generated method stub
+				return textFielddate;
+			}
+		});
 		btnUpdate.setBounds(188, 511, 117, 38);
 		panel.add(btnUpdate);
 		
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 textFielddate.setText("");
+				 textFieldshoetype.setText("");
+				textFieldshoeid.setText("");
+				textFieldcolor.setText("");
+				 textFieldsize.setText("");
+				 textFieldpair.setText("");
+				 textFieldprice.setText("");
+
+
+			}
+		});
 		btnDelete.setBounds(370, 511, 117, 38);
 		panel.add(btnDelete);
 		
@@ -179,6 +282,18 @@ public class sales extends JFrame {
 		textFieldprice.setBounds(191, 358, 230, 30);
 		panel.add(textFieldprice);
 		textFieldprice.setColumns(10);
+		
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				Dashboard dash =new Dashboard();
+				dash.setVisible(true);
+			}
+		});
+		btnBack.setBackground(new Color(143, 240, 164));
+		btnBack.setBounds(104, 572, 117, 25);
+		panel.add(btnBack);
 		
 		JLabel lblSales = new JLabel("Sales Control");
 		lblSales.setHorizontalAlignment(SwingConstants.CENTER);

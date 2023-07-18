@@ -1,10 +1,13 @@
 package javaproject2;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
@@ -48,6 +51,7 @@ public class ConnectDB {
 	}
 	 public ResultSet getUser(String Username, String Password) {
 	        ResultSet row = null;
+	        String encryptedPassword = encryptPassword(Password);
 	       
 	        String sql = "SELECT * FROM Inform WHERE UserName=? AND Password=?";
 	        try {
@@ -60,7 +64,7 @@ public class ConnectDB {
 	                dash.setVisible(true);          
 	                }
 	            else {
-	            	JOptionPane.showMessageDialog(null, "Incorrect Email or Password");
+	            	JOptionPane.showMessageDialog(null, "Incorrect UserName or Password");
 	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -68,6 +72,22 @@ public class ConnectDB {
 	        }
 	        return row;
 	    }
+	 
+	 private String encryptPassword(String password) {
+	        try {
+	            MessageDigest md = MessageDigest.getInstance("MD5");
+	            byte[] digest = md.digest(password.getBytes());
+	            StringBuilder sb = new StringBuilder();
+	            for (byte b : digest) {
+	                sb.append(String.format("%02x", b & 0xff));
+	            }
+	            return sb.toString();
+	        } catch (NoSuchAlgorithmException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+	    }
+	    
 	 
 	 public void addSales(String date,String shoetype,String shoeid,String color,String size,String pairs,String priceunit) {
 		 String sql ="INSERT INTO Sales(Date,ShoeType,ShoeId,Color,Size,Pairs,PairUnitPrice) VALUE(?,?,?,?,?,?,?)";
@@ -88,6 +108,20 @@ public class ConnectDB {
 		 } catch(SQLException e) {
 			 e.printStackTrace();
 		 }
+	 }
+	 public ResultSet getSales() {
+		 ResultSet rs = null;
+		 try {
+			 if(con!=null) {
+				String query="SELECT * FROM Sales";
+				Statement stmt =con.createStatement();
+				
+				rs =stmt.executeQuery(query);
+			 }
+		 } catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+		 return rs;
 	 }
 	
 }

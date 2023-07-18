@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.border.LineBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class SignUp extends JFrame {
 
@@ -21,8 +22,8 @@ public class SignUp extends JFrame {
 	private JTextField textName;
 	private JTextField textuserName;
 	private JTextField textEmail;
-	private JTextField textPassword;
 	String name;String userName;String email;String password;
+private JPasswordField passwordField;
 	/**
 	 * Launch the application.
 	 */
@@ -87,11 +88,6 @@ public class SignUp extends JFrame {
 		contentPane.add(textEmail);
 		textEmail.setColumns(10);
 		
-		textPassword = new JTextField();
-		textPassword.setBounds(157, 216, 175, 28);
-		contentPane.add(textPassword);
-		textPassword.setColumns(10);
-		
 		JButton btnSignin = new JButton("Sign Up");
 		btnSignin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -100,7 +96,7 @@ public class SignUp extends JFrame {
 				String name = textName.getText();
 				String email = textEmail.getText();
 				String userName = textuserName.getText();
-				String password = textPassword.getText();
+				String password = passwordField .getText();
 				
 				try {
 					db.addUser(name,userName, email,  password);
@@ -118,6 +114,15 @@ public class SignUp extends JFrame {
 		contentPane.add(btnSignin);
 		
 		JButton btnNewButton = new JButton("Cancel");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				textName.setText("");
+				textEmail.setText("");
+				textuserName.setText("");
+				passwordField .setText("");
+			}
+		});
 		btnNewButton.setBounds(196, 301, 117, 40);
 		contentPane.add(btnNewButton);
 		
@@ -135,5 +140,9 @@ public class SignUp extends JFrame {
 		JLabel lblAlreadyExist = new JLabel("Already Exist");
 		lblAlreadyExist.setBounds(40, 378, 101, 15);
 		contentPane.add(lblAlreadyExist);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(157, 211, 175, 28);
+		contentPane.add(passwordField);
 	}
 }
