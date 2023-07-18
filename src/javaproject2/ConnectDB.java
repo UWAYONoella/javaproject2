@@ -30,6 +30,8 @@ public class ConnectDB {
 	}
 	
 	public void addUser(String name,String userName,String email,String password) {
+		   String encryptedPassword = encryptPassword(password);
+	       
 		String sql="INSERT INTO Inform(Names,UserName,Email,Password) VALUES(?,?,?,?)";
 		try {
 			PreparedStatement  stm=con.prepareStatement(sql);
@@ -37,7 +39,7 @@ public class ConnectDB {
 			stm.setString(2,userName);
 			stm.setString(3,email);
 			
-			stm.setString(4,password);
+			stm.setString(4,encryptedPassword);
 			int row=stm.executeUpdate();
 			if(row>0) {
 				JOptionPane.showMessageDialog(null, "Inserted ");
@@ -57,7 +59,7 @@ public class ConnectDB {
 	        try {
 	            PreparedStatement st = con.prepareStatement(sql);
 	            st.setString(1, Username);
-	            st.setString(2, Password);
+	            st.setString(2, encryptedPassword);
 	            row = st.executeQuery();
 	            if (row.next()) {
 	                Dashboard dash=new Dashboard();
@@ -115,14 +117,51 @@ public class ConnectDB {
 			 if(con!=null) {
 				String query="SELECT * FROM Sales";
 				Statement stmt =con.createStatement();
-				
 				rs =stmt.executeQuery(query);
-			 }
+						 }
 		 } catch(SQLException e) {
 			 e.printStackTrace();
 		 }
 		 return rs;
 	 }
-	
+
+	 
+	 public ResultSet getSaleById( String date) {
+		 ResultSet row=null;
+		 String sql="SELECT * FROM Sales WHERE Date=?";
+		 try {
+			 if(con!=null) {
+			PreparedStatement pre=con.prepareStatement(sql);
+			pre.setString(1,date);
+			row=pre.executeQuery();
+		
+			 }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		return row;
+		 
+	 }
+	 
+	 public void updateSale(String date, String shoetype, String shoeid, String color, String size, String pairs, String priceunit) {
+		    String sql = "UPDATE Sales SET ShoeType=?, ShoeId=?, Color=?, Size=?, Pairs=?, PairUnitPrice=? WHERE Date=?";
+		    try {
+		        PreparedStatement st = con.prepareStatement(sql);
+		        st.setString(1, shoetype);
+		        st.setString(2, shoeid);
+		        st.setString(3, color);
+		        st.setString(4, size);
+		        st.setString(5, pairs);
+		        st.setString(6, priceunit);
+		        st.setString(7, date);
+
+		        int row = st.executeUpdate();
+		        
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		}
 }
 

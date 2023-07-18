@@ -156,6 +156,16 @@ public class sales extends JFrame {
 				
 				try {
 					db.addSales( date,shoetype,shoeid,color,size,pairs, priceunit);
+					row[0]=date;
+					row[1]=shoetype;
+					row[2]=shoeid;
+					row[3]=color;
+					row[4]=size;
+					row[5]=pairs;
+					row[6]=priceunit;
+					model.addRow(row);
+					
+					
 					
 //					JOptionPane.showMessageDialog(null, "Well connected!");
 				} catch(Exception en) {
@@ -166,62 +176,47 @@ public class sales extends JFrame {
 		btnAdd.setBounds(22, 511, 117, 38);
 		panel.add(btnAdd);
 		
+		
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ConnectDB db = new ConnectDB();
+				
+				ConnectDB db=new ConnectDB();
 				db.dbConnection();
-				String date = textFielddate().getText();
-				String shoetype = textFieldshoetype().getText();
-				String shoeid = textFieldshoeid().getText();
-				String color = textFieldcolor().getText();
-				String size = textFieldsize().getText();
-				String pairs = textFieldpair().getText();
-				String priceunit = textFieldprice().getText();
-
+				int selectrow=table.getSelectedRow();
+				if(selectrow!=-1) {
+				String date=table.getValueAt(selectrow, 0).toString();
+				ResultSet rs=db.getSaleById(date);
+				
 				try {
-					db.addSales( date,shoetype,shoeid,color,size,pairs, priceunit);
-					
-//					JOptionPane.showMessageDialog(null, "Well connected!");
-				} catch(Exception en) {
-					en.printStackTrace();
+					while(rs.next()) {
+						String date1=rs.getString("Date");
+						String shoetype=rs.getString("ShoeType");
+						String shoeid=rs.getString("ShoeId");
+						String color=rs.getString("Color");
+						String size=rs.getString("Size");
+						String pair=rs.getString("Pairs");
+						String price=rs.getString("PairUnitPrice");
+						textFielddate.setText(date1);
+						textFieldshoetype.setText(shoetype);
+						textFieldshoeid.setText(shoeid);
+						textFieldcolor.setText(color);
+						 textFieldsize.setText(size);
+						 textFieldpair.setText(pair);
+						 textFieldprice.setText(price);
+						db.updateSale(date1, shoetype, shoeid, color, size, pair, price);
+						
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
+				
+				}
+				
 			}
 
-			private JTextField textFieldprice() {
-				// TODO Auto-generated method stub
-				return textFieldprice;
-			}
-
-			private JTextField textFieldsize() {
-				// TODO Auto-generated method stub
-				return textFieldprice;
-			}
-
-			private JTextField textFieldpair() {
-				// TODO Auto-generated method stub
-				return textFieldpair;
-			}
-
-			private JTextField textFieldcolor() {
-				// TODO Auto-generated method stub
-				return textFieldcolor;
-			}
-
-			private JTextField textFieldshoeid() {
-				// TODO Auto-generated method stub
-				return textFieldshoeid;
-			}
-
-			private JTextField textFieldshoetype() {
-				// TODO Auto-generated method stub
-				return textFieldshoetype;
-			}
-
-			private JTextField textFielddate() {
-				// TODO Auto-generated method stub
-				return textFielddate;
-			}
+			
 		});
 		btnUpdate.setBounds(188, 511, 117, 38);
 		panel.add(btnUpdate);
@@ -242,7 +237,7 @@ public class sales extends JFrame {
 		});
 		btnDelete.setBounds(370, 511, 117, 38);
 		panel.add(btnDelete);
-		
+
 		textFielddate = new JTextField();
 		textFielddate.setBounds(191, 12, 230, 30);
 		panel.add(textFielddate);
@@ -292,8 +287,24 @@ public class sales extends JFrame {
 			}
 		});
 		btnBack.setBackground(new Color(143, 240, 164));
-		btnBack.setBounds(104, 572, 117, 25);
+		btnBack.setBounds(22, 576, 117, 25);
 		panel.add(btnBack);
+		
+		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 textFielddate.setText("");
+				 textFieldshoetype.setText("");
+				textFieldshoeid.setText("");
+				textFieldcolor.setText("");
+				 textFieldsize.setText("");
+				 textFieldpair.setText("");
+				 textFieldprice.setText("");
+			}
+		});
+		btnClear.setBackground(new Color(143, 240, 164));
+		btnClear.setBounds(188, 576, 117, 25);
+		panel.add(btnClear);
 		
 		JLabel lblSales = new JLabel("Sales Control");
 		lblSales.setHorizontalAlignment(SwingConstants.CENTER);
