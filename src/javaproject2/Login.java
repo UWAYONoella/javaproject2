@@ -75,9 +75,10 @@ public class Login extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				 String Username = txtUsername.getText();
 	                String Password = textpassword.getText();
-
-	                     ConnectDB db = new ConnectDB();
-	                     db.dbConnection();              
+	                ConnectDB db = new ConnectDB();
+	                     db.dbConnection();  
+	                     
+	                     
 	                     db.getUser(Username, Password);
 				
 			}
@@ -112,6 +113,16 @@ public class Login extends JFrame {
 		JLabel lblNewUser = new JLabel("New User");
 		lblNewUser.setBounds(205, 308, 70, 15);
 		contentPane.add(lblNewUser);
+		
+		JButton btnLoginAsAdmin = new JButton("login as admin");
+		btnLoginAsAdmin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				Adminform df = new Adminform();
+				df.setVisible(true);
+			}
+		});
+		btnLoginAsAdmin.setBounds(367, 341, 150, 25);
+		contentPane.add(btnLoginAsAdmin);
 	}
-
 }

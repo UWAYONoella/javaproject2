@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class ConnectDB {
 
@@ -145,23 +146,77 @@ public class ConnectDB {
 		 
 	 }
 	 
+	 
 	 public void updateSale(String date, String shoetype, String shoeid, String color, String size, String pairs, String priceunit) {
 		    String sql = "UPDATE Sales SET ShoeType=?, ShoeId=?, Color=?, Size=?, Pairs=?, PairUnitPrice=? WHERE Date=?";
 		    try {
-		        PreparedStatement st = con.prepareStatement(sql);
-		        st.setString(1, shoetype);
-		        st.setString(2, shoeid);
-		        st.setString(3, color);
-		        st.setString(4, size);
-		        st.setString(5, pairs);
-		        st.setString(6, priceunit);
-		        st.setString(7, date);
+		        if (con != null) {
+		            PreparedStatement st = con.prepareStatement(sql);
+		            st.setString(1, shoetype);
+		            st.setString(2, shoeid);
+		            st.setString(3, color);
+		            st.setString(4, size);
+		            st.setString(5, pairs);
+		            st.setString(6, priceunit);
+		            st.setString(7, date);
 
-		        int row = st.executeUpdate();
-		        
+		            int row = st.executeUpdate();
+		            if (row > 0) {
+		                JOptionPane.showMessageDialog(null, "Entry updated successfully");
+		            }
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Database connection not established.");
+		        }
 		    } catch (SQLException e) {
 		        e.printStackTrace();
 		    }
 		}
+	// Delete methode
+
+	 public void deleteSale(String date) {
+	     String sql = "DELETE FROM Sales WHERE Date = ?";
+	     try {
+	         if (con != null) {
+	             PreparedStatement st = con.prepareStatement(sql);
+	             st.setString(1, date);
+	             int row = st.executeUpdate();
+	             if (row > 0) {
+	                 JOptionPane.showMessageDialog(null, "Entry deleted successfully");
+	             }
+	         } else {
+	             JOptionPane.showMessageDialog(null, "Database connection not established.");
+	         }
+	     } catch (SQLException e) {
+	         e.printStackTrace();
+	     }
+	 }
+	 
+	 
+	 public void displayData(DefaultTableModel model) {
+		    String sql = "SELECT * FROM Inform";
+		    try {
+		        Statement stmt = con.createStatement();
+		        ResultSet rs = stmt.executeQuery(sql);
+
+		        while (rs.next()) {
+		            String id = rs.getString("ID");
+		            String name = rs.getString("Names");
+		            String userName = rs.getString("UserName");
+		            String email = rs.getString("Email");
+		            String password = rs.getString("Password");
+
+		            // Add the retrieved data to the table model
+		            model.addRow(new Object[] { id, name, userName, email, password });
+		        }
+
+		        rs.close();
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		}
+
+
+	
+
 }
 

@@ -180,39 +180,31 @@ public class sales extends JFrame {
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				ConnectDB db=new ConnectDB();
-				db.dbConnection();
-				int selectrow=table.getSelectedRow();
-				if(selectrow!=-1) {
-				String date=table.getValueAt(selectrow, 0).toString();
-				ResultSet rs=db.getSaleById(date);
-				
-				try {
-					while(rs.next()) {
-						String date1=rs.getString("Date");
-						String shoetype=rs.getString("ShoeType");
-						String shoeid=rs.getString("ShoeId");
-						String color=rs.getString("Color");
-						String size=rs.getString("Size");
-						String pair=rs.getString("Pairs");
-						String price=rs.getString("PairUnitPrice");
-						textFielddate.setText(date1);
-						textFieldshoetype.setText(shoetype);
-						textFieldshoeid.setText(shoeid);
-						textFieldcolor.setText(color);
-						 textFieldsize.setText(size);
-						 textFieldpair.setText(pair);
-						 textFieldprice.setText(price);
-						db.updateSale(date1, shoetype, shoeid, color, size, pair, price);
-						
-					}
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				}
+
+				int selectedRow = table.getSelectedRow();
+		        if (selectedRow != -1) {
+		            String date = table.getValueAt(selectedRow, 0).toString();
+		            String shoetype = textFieldshoetype.getText();
+		            String shoeid = textFieldshoeid.getText();
+		            String color = textFieldcolor.getText();
+		            String size = textFieldsize.getText();
+		            String pairs = textFieldpair.getText();
+		            String priceunit = textFieldprice.getText();
+
+		            ConnectDB db = new ConnectDB();
+		            db.dbConnection();
+		            db.updateSale(date, shoetype, shoeid, color, size, pairs, priceunit);
+		            model.setValueAt(shoetype, selectedRow, 1);
+		            model.setValueAt(shoeid, selectedRow, 2);
+		            model.setValueAt(color, selectedRow, 3);
+		            model.setValueAt(size, selectedRow, 4);
+		            model.setValueAt(pairs, selectedRow, 5);
+		            model.setValueAt(priceunit, selectedRow, 6);
+		            JOptionPane.showMessageDialog(null, "Entry updated successfully");
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Please select a row to update.");
+		        }
+			        
 				
 			}
 
@@ -224,14 +216,23 @@ public class sales extends JFrame {
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 textFielddate.setText("");
-				 textFieldshoetype.setText("");
-				textFieldshoeid.setText("");
-				textFieldcolor.setText("");
-				 textFieldsize.setText("");
-				 textFieldpair.setText("");
-				 textFieldprice.setText("");
-
+				
+				
+				int selectedRow = table.getSelectedRow();
+		        if (selectedRow != -1) {
+		            String date = table.getValueAt(selectedRow, 0).toString();
+		            int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this row?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+		            if (confirm == JOptionPane.YES_OPTION) {
+		                ConnectDB db = new ConnectDB();
+		                db.dbConnection();
+		                db.deleteSale(date);
+		                model.removeRow(selectedRow);
+//		                JOptionPane.showMessageDialog(null, "Entry deleted successfully");
+		            }
+		            
+		        } else {
+		            JOptionPane.showMessageDialog(null, " Please select a row to delete.");
+		        }
 
 			}
 		});

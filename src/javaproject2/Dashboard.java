@@ -73,7 +73,7 @@ public class Dashboard extends JFrame {
 		
 		JButton btnBuy = new JButton("Stock");
 		btnBuy.setBackground(new Color(255, 255, 255));
-		btnBuy.setBounds(12, 320, 117, 34);
+		btnBuy.setBounds(12, 287, 117, 34);
 		panel.add(btnBuy);
 		
 		JButton btnLogout = new JButton("Logout");
@@ -85,10 +85,20 @@ public class Dashboard extends JFrame {
 			}
 		});
 		btnLogout.setBackground(new Color(255, 255, 255));
-		btnLogout.setBounds(12, 477, 117, 34);
+		btnLogout.setBounds(12, 435, 117, 34);
 		panel.add(btnLogout);
 		
-		JLabel lblDashboard = new JLabel("Shoes Shopping User Control System");
+		JButton btnExit = new JButton("Exit");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		btnExit.setBackground(new Color(143, 240, 164));
+		btnExit.setBounds(12, 523, 117, 34);
+		panel.add(btnExit);
+		
+		JLabel lblDashboard = new JLabel("Shoes Shop User Control System");
 		lblDashboard.setBounds(250, 0, 472, 43);
 		lblDashboard.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 20));
 		mainPane.add(lblDashboard);
